@@ -1,4 +1,4 @@
-# https://adventofcode.com/2024/day/5
+# https://adventofcode.com/2024/day/6
 
 class FileReader:
     def __init__(self):
