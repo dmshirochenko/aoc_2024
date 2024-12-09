@@ -12,7 +12,7 @@ class FileReader:
                 yield row.strip()
 
 
-class HistorianLocator():
+class HistorianLocator:
     def __init__(self):
         pass
 
@@ -44,7 +44,6 @@ class HistorianLocator():
             else:
                 locations_dict[loc] = 1
 
-
         return locations_dict
 
     def find_common_locations(self, locations_1, locations_2):
@@ -55,15 +54,15 @@ class HistorianLocator():
             if loc in locations_dict_2:
                 sum_of_common_locations += int(loc) * locations_dict_2[loc]
 
-
         return sum_of_common_locations
+
 
 if __name__ == "__main__":
     locator = HistorianLocator()
     locations_1, locations_2 = locator.location_id_reader("day_1.txt")
     sum_diff = locator.sum_of_locations_diff(locations_1, locations_2)
-    #task 1
+    # task 1
     print("sum of locations diff: ", sum_diff)
-    #task 2
+    # task 2
     sum_common = locator.find_common_locations(locations_1, locations_2)
     print("sum of common locations: ", sum_common)

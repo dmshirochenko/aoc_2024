@@ -2,6 +2,7 @@
 import re
 from collections import deque
 
+
 class FileReader:
     def __init__(self):
         pass
@@ -11,6 +12,7 @@ class FileReader:
         with open(file_name, "r") as file:
             for row in file:
                 yield row.strip()
+
 
 possible_xmas_set = {"X", "M", "A", "S"}
 
@@ -24,6 +26,7 @@ possible_directions = {
     "down_left": (1, -1),
     "down_right": (1, 1),
 }
+
 
 class CeresSearch:
     def __init__(self):
@@ -53,7 +56,7 @@ class CeresSearch:
             moves.append((row, col - 1))
         if col + 1 < len(ceres_data[0]):
             moves.append((row, col + 1))
-        #diagonal moves
+        # diagonal moves
         if row - 1 >= 0 and col - 1 >= 0:
             moves.append((row - 1, col - 1))
         if row - 1 >= 0 and col + 1 < len(ceres_data[0]):
@@ -86,16 +89,15 @@ class CeresSearch:
         return None
 
     def check_if_prev_chat_is_valid(self, prev_char, current_char):
-        # X -> M -> A -> S    
+        # X -> M -> A -> S
         if prev_char == "X" and current_char == "M":
             return True
         if prev_char == "M" and current_char == "A":
             return True
         if prev_char == "A" and current_char == "S":
             return True
-        
-        return False
 
+        return False
 
     def xmas_word_search(self, row, col, ceres_data):
         count_xmas_words = 0
@@ -103,11 +105,11 @@ class CeresSearch:
         for direction, (dr, dc) in possible_directions.items():
             word = "X"
             current_row, current_col = row, col
-            
+
             while True:
                 # Calculate the next move
                 next_row, next_col = current_row + dr, current_col + dc
-                
+
                 # Check if the move is within the grid and valid
                 if (next_row, next_col) in self.possible_moves_in_grid_for_bfs(ceres_data, current_row, current_col):
                     prev_char = ceres_data[current_row][current_col]
@@ -117,13 +119,13 @@ class CeresSearch:
                     if self.check_if_prev_chat_is_valid(prev_char, new_char):
                         print(prev_char, new_char)
                         word += new_char
-                        
+
                         # Check if we have found "XMAS"
                         if word == "XMAS":
                             print("Found word:", word)
                             count_xmas_words += 1
                             break
-                        
+
                         # Move to the next position
                         current_row, current_col = next_row, next_col
                     else:
@@ -132,7 +134,6 @@ class CeresSearch:
                     break
 
         return count_xmas_words
-
 
     def count_xmas_words(self, ceres_data):
         count_xmas_words = 0
@@ -143,7 +144,7 @@ class CeresSearch:
                     count_xmas_words += self.xmas_word_search(row, col, ceres_data)
 
         return count_xmas_words
-    
+
     def print_path(self, ceres_data, path):
         for row in range(len(ceres_data)):
             for col in range(len(ceres_data[0])):
@@ -159,7 +160,6 @@ class CeresSearch:
         coord_lst.sort(key=lambda x: (x[0], x[1]))
         return coord_lst
 
-
     def xmas_pattern_search(self, row, col, ceres_data):
         """
         Searches for the Xmas pattern:
@@ -171,32 +171,45 @@ class CeresSearch:
 
         # check that from A we can find 2 M on the left and 2 S on the right
         if col - 1 >= 0 and col + 1 < len(ceres_data[0]) and row - 1 >= 0 and row + 1 < len(ceres_data):
-            if ceres_data[row][col] == "A" and ceres_data[row - 1][col - 1] == "M" and ceres_data[row + 1][col - 1] == "M":
+            if (
+                ceres_data[row][col] == "A"
+                and ceres_data[row - 1][col - 1] == "M"
+                and ceres_data[row + 1][col - 1] == "M"
+            ):
                 if ceres_data[row + 1][col + 1] == "S" and ceres_data[row - 1][col + 1] == "S":
                     count_xmas_words += 1
-        
+
         # check that from A we can find 2 M on the right and 2 S on the left
         if col - 1 >= 0 and col + 1 < len(ceres_data[0]) and row - 1 >= 0 and row + 1 < len(ceres_data):
-            if ceres_data[row][col] == "A" and ceres_data[row - 1][col + 1] == "M" and ceres_data[row + 1][col + 1] == "M":
+            if (
+                ceres_data[row][col] == "A"
+                and ceres_data[row - 1][col + 1] == "M"
+                and ceres_data[row + 1][col + 1] == "M"
+            ):
                 if ceres_data[row + 1][col - 1] == "S" and ceres_data[row - 1][col - 1] == "S":
                     count_xmas_words += 1
-        
+
         # check that from A we can find 2 S on the top and 2 M on the bottom
         if col - 1 >= 0 and col + 1 < len(ceres_data[0]) and row - 1 >= 0 and row + 1 < len(ceres_data):
-            if ceres_data[row][col] == "A" and ceres_data[row - 1][col - 1] == "S" and ceres_data[row - 1][col + 1] == "S":
+            if (
+                ceres_data[row][col] == "A"
+                and ceres_data[row - 1][col - 1] == "S"
+                and ceres_data[row - 1][col + 1] == "S"
+            ):
                 if ceres_data[row + 1][col + 1] == "M" and ceres_data[row + 1][col - 1] == "M":
                     count_xmas_words += 1
 
         # check that from A we can find 2 S on the bottom and 2 M on the top
         if col - 1 >= 0 and col + 1 < len(ceres_data[0]) and row - 1 >= 0 and row + 1 < len(ceres_data):
-            if ceres_data[row][col] == "A" and ceres_data[row + 1][col - 1] == "S" and ceres_data[row + 1][col + 1] == "S":
+            if (
+                ceres_data[row][col] == "A"
+                and ceres_data[row + 1][col - 1] == "S"
+                and ceres_data[row + 1][col + 1] == "S"
+            ):
                 if ceres_data[row - 1][col + 1] == "M" and ceres_data[row - 1][col - 1] == "M":
                     count_xmas_words += 1
 
-
         return count_xmas_words
-
-
 
     def count_xmas_patterns(self, ceres_data):
         count_xmas_words = 0
@@ -208,11 +221,11 @@ class CeresSearch:
 
         return count_xmas_words
 
+
 if __name__ == "__main__":
     ceres_search = CeresSearch()
     ceres_data = ceres_search.reading_ceres_data("day_4.txt")
-    #task 1
+    # task 1
     print(ceres_search.count_xmas_words(ceres_data))
-    #task 2
+    # task 2
     print(ceres_search.count_xmas_patterns(ceres_data))
-
