@@ -1,6 +1,7 @@
 # https://adventofcode.com/2024/day/3
 import re
 
+
 class FileReader:
     def __init__(self):
         pass
@@ -11,12 +12,13 @@ class FileReader:
             for row in file:
                 yield row.strip()
 
+
 class ComputerChecker:
     def __init__(self):
         pass
 
     def reading_computer_data(self, file_name):
-        computer_data = ''
+        computer_data = ""
         for row in FileReader.gen_file_reader(file_name):
             computer_data += row
 
@@ -28,7 +30,7 @@ class ComputerChecker:
         matches = re.findall(pattern, report)
 
         return matches
-    
+
     def reg_exp_matching_result_multiplication(self, matching_lst):
         result = 0
         for match in matching_lst:
@@ -37,10 +39,9 @@ class ComputerChecker:
 
         return result
 
-
     def finding_given_pattern(self, report):
         digit_lst = []
-        #pattern mul(5,5)
+        # pattern mul(5,5)
         for i in range(5, len(report)):
             left = i - 1
             right = i + 1
@@ -63,9 +64,9 @@ class ComputerChecker:
                     else:
                         is_valid = False
                         break
-                    
+
                     left -= 1
-                
+
                 while True:
                     if report[right].isdigit() and possible_digits_right > 0:
                         possible_digits_right -= 1
@@ -78,20 +79,25 @@ class ComputerChecker:
                         break
 
                     right += 1
-            
+
             if report[i] == "d":
 
                 if report[i : i + 4] == "do()":
                     digit_lst.append(1)
                 elif report[i : i + 7] == "don't()":
                     digit_lst.append(0)
-            
-            if is_valid and is_digit_left_exist and is_bracket_left_exist and is_digit_right_exist and is_bracket_right_exist:
+
+            if (
+                is_valid
+                and is_digit_left_exist
+                and is_bracket_left_exist
+                and is_digit_right_exist
+                and is_bracket_right_exist
+            ):
                 if report[left - 3 : left] == "mul":
                     digit_left, digit_right = report[left + 1 : right].split(",")
                     digit_lst.append((int(digit_left), int(digit_right)))
-            
-        
+
         return digit_lst
 
     def digit_multiplication(self, digit_lst):
@@ -115,7 +121,7 @@ class ComputerChecker:
             result += digit_left * digit_right * do_multiplier
 
         return result
-                
+
 
 if __name__ == "__main__":
     checker = ComputerChecker()
@@ -124,10 +130,9 @@ if __name__ == "__main__":
     reg_exp_matches = checker.reg_exp_matching(report)
     result = checker.digit_multiplication(digit_lst)
     result_reg_exp = checker.reg_exp_matching_result_multiplication(reg_exp_matches)
-    #task 1
+    # task 1
     print("result: ", result)
     print("result_reg_exp: ", result_reg_exp)
-    #task 2
+    # task 2
     result_do_dont = checker.digit_multiplication_with_do_and_dont(digit_lst)
     print("result_do_dont: ", result_do_dont)
-    

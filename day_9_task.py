@@ -13,6 +13,7 @@ class FileReader:
             for row in file:
                 yield row.strip()
 
+
 class DataChank:
     def __init__(self, starting_index, chank_size, file_id=None):
         self.starting_index = starting_index
@@ -30,7 +31,6 @@ class DiskFragmenter:
         self.free_space_size = 0
         self.file_chuncks_lst = []
         self.free_space_chuncks_lst = []
-        
 
     def reading_disk_data(self, file_name):
         first_file_num = None
@@ -51,10 +51,10 @@ class DiskFragmenter:
                         self.disk_data.append(".")
                     self.free_space_size += int(num)
                     next_chunk = "file"
-        
+
         self.initial_free_space_index = first_file_num
 
-        #delete first file chuck
+        # delete first file chuck
         self.file_chuncks_lst.pop(0)
         # revert file chuncks list
         self.file_chuncks_lst = self.file_chuncks_lst[::-1]
@@ -82,9 +82,8 @@ class DiskFragmenter:
                 right -= 1
                 self.free_space_size -= 1
 
-
         return disk_data_copy
-    
+
     def defragmenting_disk_full_file(self):
         disk_data_copy = self.disk_data[:]
         for file_chunk in self.file_chuncks_lst:
@@ -106,7 +105,7 @@ class DiskFragmenter:
                     free_space_chunk.chank_size -= file_chunk.chank_size
                     free_space_chunk.starting_index += file_chunk.chank_size
                     break
-        
+
         return disk_data_copy
 
     def count_new_disk_check_sum(self, disk_data_copy):
@@ -115,7 +114,7 @@ class DiskFragmenter:
             if num == ".":
                 continue
             check_sum += num * index
-        
+
         return check_sum
 
 
@@ -124,9 +123,9 @@ if __name__ == "__main__":
     disk_data = disk_fragmenter.reading_disk_data("day_9.txt")
     disk_data_copy = disk_fragmenter.defragmenting_disk()
     check_sum = disk_fragmenter.count_new_disk_check_sum(disk_data_copy)
-    #task 1
+    # task 1
     print("check sum: ", check_sum)
-    #task 2
+    # task 2
     disk_data_copy_2 = disk_fragmenter.defragmenting_disk_full_file()
     check_sum_task_2 = disk_fragmenter.count_new_disk_check_sum(disk_data_copy_2)
     print("check sum task 2: ", check_sum_task_2)
