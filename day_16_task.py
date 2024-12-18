@@ -1,5 +1,6 @@
-# https://adventofcode.com/2024/day/15
+# https://adventofcode.com/2024/day/16
 import heapq
+
 
 class FileReader:
     def __init__(self):
@@ -10,6 +11,7 @@ class FileReader:
         with open(file_name, "r") as file:
             for row in file:
                 yield row.strip()
+
 
 POSSIBLE_MOVES = {
     "right": (0, 1),
@@ -32,6 +34,7 @@ OPPOSITE_DIRECTION = {
     "up": "down",
 }
 
+
 class ReindeerMaze:
     def __init__(self):
         self.grid = []
@@ -39,7 +42,7 @@ class ReindeerMaze:
         self.reinder_final_position = None
         self.visited_paths = set()
 
-    def reading_reindeer_data(self, file_name):     
+    def reading_reindeer_data(self, file_name):
         for row_index, row in enumerate(FileReader.gen_file_reader(file_name)):
             row_lst = list(row)
             self.grid.append(row_lst)
@@ -67,7 +70,7 @@ class ReindeerMaze:
             return "up"
         if direction == "up":
             return "right"
-    
+
     def turn_counter_clockwise_90(self, direction):
         if direction == "right":
             return "up"
@@ -99,14 +102,14 @@ class ReindeerMaze:
         new_row, new_col = row + move[0], col + move[1]
         if self.is_move_possible(new_row, new_col):
             moves.append(((new_row, new_col, direction), 1))
-        
+
         # Turn clockwise
         new_direction = self.turn_clockwise_90(direction)
         move = POSSIBLE_MOVES[new_direction]
         new_row, new_col = row + move[0], col + move[1]
         if self.is_move_possible(new_row, new_col):
             moves.append(((new_row, new_col, new_direction), 1001))
-        
+
         # Turn counter clockwise
         new_direction = self.turn_counter_clockwise_90(direction)
         move = POSSIBLE_MOVES[new_direction]
@@ -122,7 +125,6 @@ class ReindeerMaze:
             moves.append(((new_row, new_col, new_direction), 2001))
 
         return moves
-
 
     def path_recovery(self, min_cost, target_node):
         path = []
@@ -152,11 +154,10 @@ class ReindeerMaze:
             if current_node in visited:
                 continue
             visited.add(current_node)
-            
-   
+
             # Iterate over neighbors
             for neighbor, edge_weight in self.get_next_moves(current_node):
-                #print(f"Neighbor: {neighbor}, edge weight: {edge_weight}")
+                # print(f"Neighbor: {neighbor}, edge weight: {edge_weight}")
                 if neighbor not in visited:
                     new_weight = current_weight + edge_weight
                     if neighbor in min_cost:
@@ -166,27 +167,21 @@ class ReindeerMaze:
                     else:
                         min_cost[neighbor] = (new_weight, current_node)
                         heapq.heappush(heap, (new_weight, neighbor))
-                        
-    
+
         return min_cost
-        
+
 
 if __name__ == "__main__":
     reindeer_maze = ReindeerMaze()
     reindeer_maze.reading_reindeer_data("day_16.txt")
     start_node = reindeer_maze.reindeer_initial_position
     min_cost = reindeer_maze.dijkstra_shortest_path(start_node, "right")
-
-    min_path = 1_000_000_000_000_000
+    # task 1
+    min_path = float("inf")
     for key, value in min_cost.items():
         if reindeer_maze.grid[key[0]][key[1]] == "E":
             if value[0] < min_path:
                 min_path = value[0]
                 target_node = key
-            
+
     print("Min path: ", min_path)
-
-
-    reversed_path = reindeer_maze.path_recovery(min_cost, target_node)
-    reindeer_maze.print_grid(reindeer_maze.grid)
-    
