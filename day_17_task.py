@@ -1,6 +1,7 @@
 # https://adventofcode.com/2024/day/17
 import heapq
 
+
 class FileReader:
     def __init__(self):
         pass
@@ -11,15 +12,16 @@ class FileReader:
             for row in file:
                 yield row.strip()
 
+
 class ElfComputer:
     def __init__(self):
         self.register_a = None
         self.register_b = None
         self.register_c = None
 
-        self.program_lst  = []
+        self.program_lst = []
         self.program_output = []
-    
+
     def reading_program_data(self, file_name):
         file_generator = FileReader.gen_file_reader(file_name)
         self.register_a = int(next(file_generator).split("Register A: ")[1])
@@ -44,7 +46,7 @@ class ElfComputer:
     def print_to_file(self, name, data):
         with open("day_17_logs.txt", "a") as file:
             file.write(name + str(data) + "\n")
-    
+
     def instruntion_mapper(self, opcode, literal_operand):
         if opcode == 0:
             return self.opcode_0(literal_operand)
@@ -65,7 +67,7 @@ class ElfComputer:
 
     def opcode_0(self, literal_operand):
         combo_operand = self.get_combo_operand_value(literal_operand)
-        updated_a_register = self.register_a // (2 ** combo_operand)
+        updated_a_register = self.register_a // (2**combo_operand)
 
         self.register_a = updated_a_register
 
@@ -91,7 +93,7 @@ class ElfComputer:
         if self.register_a != 0:
             return new_instruction_pointer
         return None
-     
+
     def opcode_4(self, literal_operand):
         updated_b_register = self.register_b ^ self.register_c
 
@@ -100,7 +102,7 @@ class ElfComputer:
         return None
 
     def opcode_5(self, literal_operand):
-        combo_operand = self.get_combo_operand_value(literal_operand) 
+        combo_operand = self.get_combo_operand_value(literal_operand)
 
         self.program_output.append(combo_operand % 8)
 
@@ -108,22 +110,29 @@ class ElfComputer:
 
     def opcode_6(self, literal_operand):
         combo_operand = self.get_combo_operand_value(literal_operand)
-        updated_b_register = self.register_a // (2 ** combo_operand)
+        updated_b_register = self.register_a // (2**combo_operand)
 
         self.register_b = updated_b_register
 
         return None
-    
+
     def opcode_7(self, literal_operand):
         combo_operand = self.get_combo_operand_value(literal_operand)
-        updated_c_register = self.register_a // (2 ** combo_operand)
+        updated_c_register = self.register_a // (2**combo_operand)
 
-        self.register_c = updated_c_register   
+        self.register_c = updated_c_register
 
         return None
 
-    def computer_program_execution(self):
+    def computer_program_execution(self, a=None):
         instruction_pointer = 0
+        if a is not None:
+            self.register_a = a
+
+        self.register_b = 0
+        self.register_c = 0
+        self.program_output = []
+
         is_instruction_jump = True
         while instruction_pointer < len(self.program_lst):
             try:
@@ -141,6 +150,23 @@ class ElfComputer:
 
         return self.program_output
 
+    def get_same_program_output(self, a=0, depth=0):
+        target = self.program_lst[::-1]
+
+        def find_a(a=0, depth=0):
+            if depth == len(target):
+                return a
+            for i in range(8):
+                output = self.computer_program_execution(a * 8 + i)
+                if output and output[0] == target[depth]:
+                    if result := find_a((a * 8 + i), depth + 1):
+                        return result
+            return 0
+
+        result = find_a()
+        return result
+
+
 if __name__ == "__main__":
     elf_computer = ElfComputer()
     program_lst = elf_computer.reading_program_data("day_17.txt")
@@ -150,3 +176,6 @@ if __name__ == "__main__":
     print("register b: ", elf_computer.register_b)
     print("register c: ", elf_computer.register_c)
     print("output: ", ",".join(str(num) for num in output))
+    # task 2
+    result = elf_computer.get_same_program_output()
+    print("Result of task 2: ", result)
