@@ -1,6 +1,7 @@
 # https://adventofcode.com/2024/day/23
 from itertools import combinations
 
+
 class FileReader:
     def __init__(self):
         pass
@@ -12,7 +13,7 @@ class FileReader:
                 yield row.strip()
 
 
-class LanParty():
+class LanParty:
     def __init__(self):
         self.network_dct = dict()
         self.all_networks_lst = []
@@ -27,14 +28,12 @@ class LanParty():
             else:
                 self.network_dct[machine_1].add(machine_2)
 
-
             if machine_2 not in self.network_dct:
                 self.network_dct[machine_2] = set()
                 self.network_dct[machine_2].add(machine_1)
                 self.network_dct[machine_2].add(machine_2)
             else:
                 self.network_dct[machine_2].add(machine_1)
-
 
     def count_networks_with_n_machines_starts_with_letter(self, n, letter):
         count = 0
@@ -49,7 +48,6 @@ class LanParty():
                                 current_mesh_set_to_sorted_tuple = tuple(sorted(current_mesh_set))
                                 seen_networks.add(current_mesh_set_to_sorted_tuple)
 
-        
         for network in seen_networks:
             for machine in network:
                 if machine.startswith(letter):
@@ -67,7 +65,6 @@ class LanParty():
                 if machine != key:
                     connected_to_key_node_pack.append(self.network_dct[machine])
 
-            
             all_connected_networks_lst.append(connected_to_key_node_pack)
 
         return all_connected_networks_lst
@@ -77,7 +74,7 @@ class LanParty():
         max_connected_network = None
         for network in all_connected_networks_lst:
             initial_set = set.intersection(*network)
-        
+
             if len(initial_set) > max_len_of_all_connected_networks:
                 max_len_of_all_connected_networks = len(initial_set)
                 max_connected_network = initial_set
@@ -90,7 +87,6 @@ class LanParty():
                             max_len_of_all_connected_networks = len(perm_intersection)
                             max_connected_network = perm_intersection
                     perm_factor -= 1
-        
 
         return max_connected_network
 

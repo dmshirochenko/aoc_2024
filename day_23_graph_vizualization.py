@@ -1,5 +1,6 @@
 from pyvis.network import Network
 
+
 class FileReader:
     def __init__(self):
         pass
@@ -9,6 +10,7 @@ class FileReader:
         with open(file_name, "r") as file:
             for row in file:
                 yield row.strip()
+
 
 edges = []
 for row in FileReader.gen_file_reader("day_23.txt"):
