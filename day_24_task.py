@@ -1,4 +1,4 @@
-# https://adventofcode.com/2024/day/23
+# https://adventofcode.com/2024/day/24
 from collections import deque
 
 

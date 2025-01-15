@@ -5,7 +5,9 @@
 
 ## Highlights 🌟
 
-TO DO
+1.
+2.
+3.
 
 ## Running the Code 🏃
 
