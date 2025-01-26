@@ -5,15 +5,18 @@
 
 ## Highlights 🌟
 
-1.
-2.
-3.
+1. **Daily Coding Challenges**: Solutions for each day of December, progressively increasing in difficulty.
+2. **Python-Powered**: All solutions are written in Python, leveraging its simplicity and power for problem-solving.
+3. **Well-Organized Structure**: Each solution is in its respective `day-xx_task` folder for easy navigation.
+4. **Reusable Functions**: Wherever possible, solutions include modular and reusable code snippets.
+5. **Readable and Commented Code**: Solutions are written with readability in mind, with inline comments explaining the logic.
+
 
 ## Running the Code 🏃
 
 Want to join in on the festive fun? Follow these reindeer tracks:
 
-1. Clone the repository: `git clone git@github.com:dmshirochenko/aoc_2023.git`
+1. Clone the repository: `git clone git@github.com:dmshirochenko/aoc_2024.git`
 2. Run the solution with the magic word: `python day-xx_task.py`
 
 ## Happy Holidays! 🎉
